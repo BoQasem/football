@@ -11,14 +11,26 @@ async function getNavigationItems() {
   return data.data;
 }
 
+async function getSiteSettings() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/site-setting`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch Site Settings");
+  }
+  const data = await response.json();
+  return data.data;
+}
+
 export default async function Navbar() {
   const navigationItems = await getNavigationItems();
+  const settings = await getSiteSettings();
 
   return (
     <nav className="bg-slate-900 text-white shadow-lg">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="text-2xl font-bold">
-            My Blog
+            {settings.Site_Name}
         </Link>
         
         <div className="flex items-center gap-6">

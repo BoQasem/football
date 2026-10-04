@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "navigation_items",
+  "info": {
+    "singularName": "navigation-item",
+    "pluralName": "navigation-items",
+    "displayName": "Navigation items"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "URL": {
+      "type": "string"
+    },
+    "Order": {
+      "type": "integer"
+    }
+  }
+}

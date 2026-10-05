@@ -1,0 +1,16 @@
+# Normalise line endings in the repository.
+#
+# Without this, a Windows checkout with core.autocrlf=true rewrites line
+# endings on every file git touches and warns about it on each `git add`:
+#   "LF will be replaced by CRLF the next time Git touches it"
+* text=auto eol=lf
+
+# Binary assets: never apply text/line-ending conversion.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.db    binary

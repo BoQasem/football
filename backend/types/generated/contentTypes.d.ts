@@ -454,6 +454,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    Author: Schema.Attribute.String;
     category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     Content: Schema.Attribute.Blocks;
     Cover: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;

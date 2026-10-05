@@ -1,10 +1,10 @@
-import { getArticles, getCategories, getUsers } from "@/lib/strapi";
+import Link from "next/link";
+import { getArticles, getCategories } from "@/lib/strapi";
 
 const NO_STORE = { cache: "no-store" } as const;
 
 export default async function Home() {
-  const [users, categories, articles] = await Promise.all([
-    getUsers({ sort: "createdAt:desc", limit: "5" }, NO_STORE),
+  const [categories, articles] = await Promise.all([
     getCategories({ sort: "createdAt:desc" }, NO_STORE),
     getArticles({ sort: "createdAt:desc", "pagination[limit]": "5" }, NO_STORE),
   ]);
@@ -33,39 +33,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Latest Members */}
-      <section className="mx-auto max-w-6xl px-6 pt-20">
-        <div className="mb-8">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
-            Community
-          </span>
-
-          <h2 className="mt-2 text-3xl font-bold tracking-tight">
-            Latest Members
-          </h2>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {users.map((user) => (
-            <div
-              key={user.id}
-              className="rounded-2xl border border-gray-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900 text-lg font-bold text-white">
-                {user.username.charAt(0).toUpperCase()}
-              </div>
-
-              <h3 className="font-semibold">
-                {user.username}
-              </h3>
-
-              <p className="mt-1 break-all text-sm text-gray-500">
-                {user.email}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Categories */}
       <section className="mx-auto max-w-6xl px-6 pt-24">
         <div className="mb-8">
@@ -80,7 +47,7 @@ export default async function Home() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
-            <a
+            <Link
               key={category.id}
               href={`/category/${category.Slug}`}
               className="group flex items-center justify-between rounded-2xl border border-gray-200 bg-white px-6 py-5 font-semibold transition hover:-translate-y-1 hover:bg-gray-950 hover:text-white hover:shadow-lg">
@@ -89,7 +56,7 @@ export default async function Home() {
               <span className="text-xl text-gray-400 transition group-hover:translate-x-1 group-hover:text-white">
                 →
               </span>
-            </a>
+            </Link>
           ))}
         </div>
       </section>
@@ -108,7 +75,7 @@ export default async function Home() {
 
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
           {articles.map((article, index) => (
-            <a
+            <Link
               key={article.id}
               href={`/articles/${article.Slug}`}
               className="group grid min-h-20 grid-cols-[50px_1fr_30px] items-center border-b border-gray-200 px-5 transition last:border-b-0 hover:bg-gray-50 sm:grid-cols-[70px_1fr_40px] sm:px-7">
@@ -123,7 +90,7 @@ export default async function Home() {
               <span className="justify-self-end text-xl text-gray-400 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-gray-900">
                 ↗
               </span>
-            </a>
+            </Link>
           ))}
         </div>
       </section>

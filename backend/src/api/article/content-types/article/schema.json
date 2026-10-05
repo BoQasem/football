@@ -20,6 +20,9 @@
     "Description": {
       "type": "text"
     },
+    "Author": {
+      "type": "string"
+    },
     "Cover": {
       "type": "media",
       "multiple": false,

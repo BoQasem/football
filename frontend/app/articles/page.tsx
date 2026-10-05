@@ -1,18 +1,9 @@
 import Link from "next/link";
-
-async function getArticles() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/articles?populate=category`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to Fetch Articles");
-  }
-  const data = await response.json();
-  return data.data;
-}
+import { getArticles } from "@/lib/strapi";
 
 export default async function ArticlesPage() {
-  const articles = await getArticles();
+  const articles = await getArticles({ populate: "category" });
+
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
       <div className="mb-10">
@@ -24,7 +15,7 @@ export default async function ArticlesPage() {
       </div>
 
       <div className="space-y-6">
-        {articles.map((article: any) => (
+        {articles.map((article) => (
           <Link
             key={article.documentId}
             href={`/articles/${article.Slug}`}

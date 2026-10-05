@@ -1,17 +1,8 @@
-async function getSiteSettings() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/site-setting`
-  );
-  // Footer renders on every page, so a failed fetch must not throw.
-  if (!response.ok) {
-    return null;
-  }
-  const data = await response.json();
-  return data.data;
-}
+import { getSiteSettings } from "@/lib/strapi";
 
 export default async function Footer() {
-  const settings = await getSiteSettings();
+  // Footer renders on every page, so a failed fetch must not take down the site.
+  const settings = await getSiteSettings().catch(() => null);
   const year = new Date().getFullYear();
 
   return (

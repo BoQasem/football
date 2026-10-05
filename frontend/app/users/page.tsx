@@ -1,17 +1,9 @@
 import Link from "next/link";
-
-async function getUsers() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch users");
-  }
-  return response.json();
-}
+import { getUsers } from "@/lib/strapi";
 
 export default async function UsersPage() {
   const users = await getUsers();
+
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
       <div className="mb-10">
@@ -19,7 +11,7 @@ export default async function UsersPage() {
         <p className="mt-2 text-slate-400">Our Awesome Users</p>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {users.map((user: any) => (
+        {users.map((user) => (
           <div
             key={user.id}
             className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"

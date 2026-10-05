@@ -1,23 +1,5 @@
 import Link from "next/link";
-
-async function getCategory(slug: string) {
-  const params = new URLSearchParams({
-    "filters[Slug][$eq]": slug,
-    populate: "articles",
-  });
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/categories?${params}`
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to Fetch Category");
-  }
-
-  const data = await response.json();
-
-  return data.data[0];
-}
+import { getCategoryBySlug } from "@/lib/strapi";
 
 export default async function CategoryPage({
   params,
@@ -26,7 +8,7 @@ export default async function CategoryPage({
 }) {
   const { slug } = await params;
 
-  const category = await getCategory(slug);
+  const category = await getCategoryBySlug(slug);
 
   if (!category) {
     return <h1>Category Not Found</h1>;
@@ -45,7 +27,7 @@ export default async function CategoryPage({
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {category.articles?.map((article: any) => (
+        {category.articles?.map((article) => (
           <article
             key={article.documentId}
             className="rounded-2xl bg-white p-6 shadow-sm">

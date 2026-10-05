@@ -1,20 +1,5 @@
 import Link from "next/link";
-
-async function getArticle(slug: string) {
-  const params = new URLSearchParams({
-    "filters[Slug][$eq]": slug,
-    populate: "category",
-  });
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/articles?${params}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to Fetch Article");
-  }
-  const data = await response.json();
-  return data.data[0];
-}
+import { getArticleBySlug } from "@/lib/strapi";
 
 export default async function ArticlePage({
   params,
@@ -23,7 +8,7 @@ export default async function ArticlePage({
 }) {
   const { slug } = await params;
 
-  const article = await getArticle(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     return <h1>Article Not Found</h1>;
@@ -53,9 +38,9 @@ export default async function ArticlePage({
         </p>
 
         <div className="mt-10 text-lg leading-8 text-slate-200">
-          {article.Content?.map((block: any, index: number) => (
+          {article.Content?.map((block, index) => (
             <p key={index} className="mb-4">
-              {block.children?.map((child: any, childIndex: number) => (
+              {block.children?.map((child, childIndex) => (
                 <span key={childIndex}>{child.text}</span>
               ))}
             </p>

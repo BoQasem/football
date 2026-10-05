@@ -1,36 +1,14 @@
-const API_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+import { getArticles, getCategories, getUsers } from "@/lib/strapi";
 
-async function getData() {
-  const [usersRes, categoriesRes, articlesRes] = await Promise.all([
-    fetch(
-      `${API_URL}/api/users?sort=createdAt:desc&limit=5`,
-      { cache: "no-store" }
-    ),
-
-    fetch(
-      `${API_URL}/api/categories?sort=createdAt:desc`,
-      { cache: "no-store" }
-    ),
-
-    fetch(
-      `${API_URL}/api/articles?sort=createdAt:desc&pagination[limit]=5`,
-      { cache: "no-store" }
-    ),
-  ]);
-
-  const users = await usersRes.json();
-  const categories = await categoriesRes.json();
-  const articles = await articlesRes.json();
-
-  return {
-    users,
-    categories,
-    articles,
-  };
-}
+const NO_STORE = { cache: "no-store" } as const;
 
 export default async function Home() {
-  const { users, categories, articles } = await getData();
+  const [users, categories, articles] = await Promise.all([
+    getUsers({ sort: "createdAt:desc", limit: "5" }, NO_STORE),
+    getCategories({ sort: "createdAt:desc" }, NO_STORE),
+    getArticles({ sort: "createdAt:desc", "pagination[limit]": "5" }, NO_STORE),
+  ]);
+
   return (
     <main className="flex-1 bg-gray-50 text-gray-900">
 
@@ -68,7 +46,7 @@ export default async function Home() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {users.map((user: any) => (
+          {users.map((user) => (
             <div
               key={user.id}
               className="rounded-2xl border border-gray-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
@@ -101,7 +79,7 @@ export default async function Home() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.data.map((category: any) => (
+          {categories.map((category) => (
             <a
               key={category.id}
               href={`/category/${category.Slug}`}
@@ -129,7 +107,7 @@ export default async function Home() {
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
-          {articles.data.map((article: any, index: number) => (
+          {articles.map((article, index) => (
             <a
               key={article.id}
               href={`/articles/${article.Slug}`}

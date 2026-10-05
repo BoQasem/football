@@ -1,18 +1,8 @@
 import Link from "next/link";
-
-async function getCategories() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/categories?populate=articles`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to Fetch Categories");
-  }
-  const data = await response.json();
-  return data.data;
-}
+import { getCategories } from "@/lib/strapi";
 
 export default async function CategoriesPage() {
-  const categories = await getCategories();
+  const categories = await getCategories({ populate: "articles" });
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -24,14 +14,16 @@ export default async function CategoriesPage() {
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {categories.map((category: any) => (
+        {categories.map((category) => (
           <div
             key={category.documentId}
             className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
             <h2 className="text-2xl font-bold text-slate-900">
               {category.Name}
             </h2>
-            <p className="mt-2 text-slate-500">{category.articles?.length || 0} Articles</p>
+            <p className="mt-2 text-slate-500">
+              {category.articles?.length || 0} Articles
+            </p>
             <div className="mt-6 border-t border-slate-100 pt-4">
               <Link
                 href={`/category/${category.Slug}`}

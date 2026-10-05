@@ -1,20 +1,15 @@
 # Football
 
-A blog built as two apps in one repository:
+A blog with two apps in one repo.
 
-| | |
-|---|---|
-| `backend/` | Strapi 5 CMS (SQLite) — content types, media, admin panel |
-| `frontend/` | Next.js 16 App Router — the public site |
+- `backend/` Strapi 5 CMS, uses SQLite
+- `frontend/` Next.js 16 site
 
 ## Requirements
 
-- **Node.js 20 or newer**
-- npm
+Node.js 20 or newer.
 
-## Setup
-
-Install both halves:
+## Install
 
 ```bash
 npm install
@@ -22,49 +17,44 @@ npm --prefix backend install
 npm --prefix frontend install
 ```
 
-Then create the environment files. Both are gitignored; the `.example` files are
-the templates.
+## Environment
 
-**`backend/.env`** — Strapi generates this on first run. If you need to create it
-by hand, it needs at least:
+`backend/.env` is created by Strapi the first time you run it. It needs these:
 
 ```
-APP_KEYS=...
-API_TOKEN_SALT=...
-ADMIN_JWT_SECRET=...
-TRANSFER_TOKEN_SALT=...
-JWT_SECRET=...
+APP_KEYS=
+API_TOKEN_SALT=
+ADMIN_JWT_SECRET=
+TRANSFER_TOKEN_SALT=
+JWT_SECRET=
 ```
 
-**`frontend/.env.local`** — copy `frontend/.env.example`:
+Copy `frontend/.env.example` to `frontend/.env.local`:
 
 ```
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
-NEXT_PUBLIC_SITE_URL=http://localhost:3000   # optional; used for sitemap/robots
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-## Running
-
-Both servers, one command:
+## Run
 
 ```bash
 npm run dev
 ```
 
-- Strapi admin — http://localhost:1337/admin
-- Site — http://localhost:3000
+Admin panel: http://localhost:1337/admin
+Site: http://localhost:3000
 
-Or run them separately in two terminals:
+To run the two servers in separate terminals instead:
 
 ```bash
 npm run dev:backend
 npm run dev:frontend
 ```
 
-## Seeding
+## Seed
 
-Populates a fresh database with sample categories, articles, navigation items,
-and the Site Settings entry. Safe to re-run — it only creates what's missing.
+Fills a fresh database with sample categories, articles, nav items and site settings. Safe to run more than once.
 
 ```bash
 npm run seed
@@ -73,34 +63,25 @@ npm run seed
 ## Other commands
 
 ```bash
-npm run build      # build both apps
-npm run typecheck  # tsc --noEmit across the frontend
-npm run lint       # eslint on the frontend
+npm run build
+npm run typecheck
+npm run lint
 ```
 
-## Project layout
+## Layout
 
 ```
 backend/
-  config/            # database, server, plugins, middlewares
-  src/api/           # content types: article, category, navigation-item, site-setting
-  scripts/seed.js    # seed script (npm run seed)
-  .tmp/data.db       # SQLite database (gitignored)
+  config/
+  src/api/          content types
+  scripts/seed.js
+  .tmp/data.db      SQLite database, gitignored
 frontend/
-  app/               # routes, layouts, error/loading/not-found pages
-  components/        # Navbar, Footer, Pagination
-  lib/strapi.ts      # typed Strapi client — all API access goes through here
+  app/              routes
+  components/
+  lib/strapi.ts     all API calls go here
 ```
 
 ## Notes
 
-- **All frontend API access goes through `frontend/lib/strapi.ts`.** Add new
-  endpoints there rather than calling `fetch` directly, so error handling and
-  Strapi's response-envelope quirks stay in one place.
-- **`frontend/AGENTS.md`** warns that this Next.js release differs from older
-  conventions. Read `frontend/node_modules/next/dist/docs/` before writing
-  unfamiliar APIs — for example, error boundaries take a `retry` prop here, not
-  `reset`.
-- Strapi content types with `draftAndPublish: true` (articles, categories,
-  navigation items, site settings) must be **published**, not just saved, before
-  the public API returns them.
+Content types that use draftAndPublish (articles, categories, nav items, site settings) must be published, not just saved. The API returns nothing for a draft.

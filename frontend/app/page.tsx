@@ -32,7 +32,7 @@ async function getData() {
 export default async function Home() {
   const { users, categories, articles } = await getData();
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900">
+    <main className="flex-1 bg-gray-50 text-gray-900">
 
       {/* Hero */}
       <section className="bg-gray-950 px-6 py-24 text-white">

@@ -1,11 +1,22 @@
 import Link from "next/link";
 import { getNavigationItems, getSiteSettings } from "@/lib/strapi";
 
+/**
+ * Routes this app has retired but that may still exist as navigation items in
+ * Strapi. Rendering a link that 404s is worse than not rendering it at all.
+ *
+ * Delete an entry once the matching row is removed in the admin
+ * (Content Manager → Navigation Items), after which this list can go entirely.
+ */
+const RETIRED_ROUTES = new Set(["/users"]);
+
 export default async function Navbar() {
   const [navigationItems, settings] = await Promise.all([
     getNavigationItems(),
     getSiteSettings(),
   ]);
+
+  const links = navigationItems.filter((item) => !RETIRED_ROUTES.has(item.URL));
 
   return (
     <nav className="bg-slate-900 text-white shadow-lg">
@@ -15,7 +26,7 @@ export default async function Navbar() {
         </Link>
 
         <div className="flex items-center gap-6">
-          {navigationItems.map((item) => (
+          {links.map((item) => (
             <Link
               key={item.id}
               href={item.URL}
